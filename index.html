@@ -1,52 +1,59 @@
 <html>
+
 <head>
 	<title>Recursive Fill</title>
 
 	<style type="text/css">
-	* {
-		margin:0px;
-		padding:0px;
-	}
-	body{
-		background-color:black;
-	}
-	.row div{
-		width:50px;
-		height:50px;
-		display:inline-block;
-	}
-	.white{
-		background-color:white;
-	}
-	.red{
-		background-color:red;
-	}
-	.yellow{
-		background-color:yellow;
-	}
-	.blue{
-		background-color:blue;
-	}
-	.green{
-		background-color:green;
-	}
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
 
+		body {
+			background-color: black;
+		}
 
+		.row div {
+			width: 50px;
+			height: 50px;
+			display: inline-block;
+		}
+
+		.white {
+			background-color: white;
+		}
+
+		.red {
+			background-color: red;
+		}
+
+		.yellow {
+			background-color: yellow;
+		}
+
+		.blue {
+			background-color: blue;
+		}
+
+		.green {
+			background-color: green;
+		}
 	</style>
 </head>
+
 <body>
 
 	<div id='container'></div>
 
 	<script type="text/javascript">
 		var world = [
-			[1,1,1,0,0,0,0,3,2,2],
-			[0,0,0,0,1,0,0,3,3,3],
-			[0,2,2,0,1,0,0,0,0,0],
-			[0,2,2,0,1,1,1,1,0,0],
-			[0,2,2,0,1,0,0,0,0,3],
-			[0,2,2,0,1,0,0,3,3,3],
-			[0,0,0,0,1,0,0,3,3,3]];
+			[1, 1, 1, 0, 0, 0, 0, 3, 2, 2],
+			[0, 0, 0, 0, 1, 0, 0, 3, 3, 3],
+			[0, 2, 2, 0, 1, 0, 0, 0, 0, 0],
+			[0, 2, 2, 0, 1, 1, 1, 1, 0, 0],
+			[0, 2, 2, 0, 1, 0, 0, 0, 0, 3],
+			[0, 2, 2, 0, 1, 0, 0, 3, 3, 3],
+			[0, 0, 0, 0, 1, 0, 0, 3, 3, 3]];
 
 		var mapping = {
 			0: 'white',
@@ -56,15 +63,12 @@
 			4: 'green'
 		}
 
-		function drawWorld()
-		{
+		function drawWorld() {
 			var output = '';
-			for(var i=0; i<world.length; i++)
-			{
+			for (var i = 0; i < world.length; i++) {
 				output += '<div class="row">';
-				for(var j=0; j<world[i].length; j++)
-				{
-					output += "<div class='"+mapping[world[i][j]]+"'></div>";
+				for (var j = 0; j < world[i].length; j++) {
+					output += "<div class='" + mapping[world[i][j]] + "'></div>";
 				}
 				output += '</div>';
 			}
@@ -72,12 +76,11 @@
 			// console.log(output);
 		}
 
-		document.onclick = function(e)
-		{
+		document.onclick = function (e) {
 			// console.log('Coordinate Clicked', e.x, e.y);
 
-			var x = Math.floor(e.x/50);
-			var y = Math.floor(e.y/50);
+			var x = Math.floor(e.x / 50);
+			var y = Math.floor(e.y / 50);
 
 			// console.log('X, Y', x, y);
 			// console.log('Original Color', world[y][x]);
@@ -86,17 +89,30 @@
 			fill(x, y, world[y][x], 4);
 		}
 
-		function fill(x,y,original_color, color)
-		{
+		function fill(x, y, original_color, color) {
 
-			//your recursion codes here
+			// KRP: your recursion codes here. Something to EXIT this function
+			// so we're not calling our function forevera
+
+			// Don't change this box if its outside the world.
+			if (x < 0 || x >= world[0].length || y < 0 || y >= world.length) {
+				return false;
+			}
+			// Don't change this box if it's not the same color as the originally selected box.
+			if (world[y][x] != original_color) {
+				return false;
+			}
 
 			world[y][x] = color;
 
-			// your recursion codes here
+			// Call fill recursiveily for each adjacent square.
+			fill(x, y + 1, original_color, color);
+			fill(x, y - 1, original_color, color);
+			fill(x + 1, y, original_color, color);
+			fill(x - 1, y, original_color, color);
 
 			drawWorld();
-			
+
 		}
 
 		drawWorld();
@@ -104,4 +120,5 @@
 	</script>
 
 </body>
+
 </html>
